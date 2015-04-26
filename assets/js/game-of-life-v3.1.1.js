@@ -19,6 +19,8 @@
   var GOL;
   GOL = {
 
+
+
     //added
     points: 12,
     chancebooster: 0,
@@ -256,16 +258,21 @@
       var state, i, j, y, s = this.helpers.getUrlParameter('s');
       
       var currentlevel = parseInt(document.getElementById('levelMessages').textContent);
-      console.log(currentlevel);
+      //console.log(currentlevel);
       var cookiecheck = document.cookie;
       console.log(cookiecheck);
-      if (parseInt(cookiecheck.charAt(9)) < currentlevel)
+      Yesindex = cookiecheck.search("yes");
+      if (Yesindex != -1)
       {
-        console.log(cookiecheck.charAt(9));
-        window.stop();
-        $('#all').hide(); // Div that wraps all content in body
-        history.go(-1);
+        var n = parseInt(cookiecheck[Yesindex+3]);
+        console.log("n = " + n);
+        if (currentlevel != n+1)
+        {
+          var gotonext = "campaign" + (n+1) + ".html";
+          window.location.href = gotonext;
+        }
       }
+      
       GOL.levels.current = currentlevel;
       GOL.levels.cellcount[0] = 128*0.03*currentlevel;
       this.randomState();
@@ -472,11 +479,9 @@
       if (GOL.steps > 25)
         if (GOL.levels.cellcount[1] > 4*GOL.levels.cellcount[0])
         {
-          GOL.levels.current = GOL.levels.current+1;
-          var cookiemsg = "userlevel=" + (GOL.levels.current);
-          //console.log(cookiemsg);
-          document.cookie = "userlevel=currentlevel";
-          console.log(document.cookie);
+          var cookiestr = "yes" + GOL.levels.current;
+          document.cookie = cookiestr;
+          console.log("I'm printing cookie" + document.cookie);
           window.location.href = '#popup2';
         }
       //console.log(GOL.levels.cellcount[0]+" "+GOL.levels.cellcount[1]);
