@@ -378,6 +378,7 @@
       // Controls
       this.helpers.registerEvent(document.getElementById('buttonRun'), 'click', this.handlers.buttons.run, false);
       this.helpers.registerEvent(document.getElementById('buttonStep'), 'click', this.handlers.buttons.step, false);
+      this.helpers.registerEvent(document.getElementById('buttonRestart'), 'click', this.handlers.buttons.restartLevel, false);
       this.helpers.registerEvent(document.getElementById('buttonClear'), 'click', this.handlers.buttons.clear, false);
       this.helpers.registerEvent(document.getElementById('buttonExport'), 'click', this.handlers.buttons.export_, false);
 
@@ -643,6 +644,10 @@
 
 
         //added
+        restartLevel: function () {
+          window.location.href = "campaign.html";
+        },
+
         chooseScheme: function () {
           var x = document.getElementById("colorscheme");
           var val = x.selectedIndex;
