@@ -12,7 +12,6 @@
   * /// --> TODO
   */
 
- ///add cell counter
 
 (function () {
 
@@ -257,10 +256,12 @@
     loadState: function () {
       var state, i, j, y, s = this.helpers.getUrlParameter('s');
       
+      //added
+      //getting level from url
       var currentlevel = parseInt(document.getElementById('levelMessages').textContent);
-      //console.log(currentlevel);
       var cookiecheck = document.cookie;
       console.log(cookiecheck);
+      //load right level
       Yesindex = cookiecheck.search("yes");
       if (Yesindex != -1)
       {
@@ -387,7 +388,7 @@
       this.helpers.registerEvent(document.getElementById('buttonGrid'), 'click', this.handlers.buttons.grid, false);
       //this.helpers.registerEvent(document.getElementById('buttonColors'), 'click', this.handlers.buttons.colors, false);
 
-      //added
+      //added - new button
       this.helpers.registerEvent(document.getElementById('buttonLevel'), 'click', this.handlers.buttons.loadLevel, false);
       this.helpers.registerEvent(document.getElementById('buttonSchemeConfirm'), 'click', this.handlers.buttons.chooseScheme, false);
       this.helpers.registerEvent(document.getElementById('buttonCustomize'), 'click', this.handlers.buttons.chooseColor, false);
@@ -419,9 +420,8 @@
         x = this.listLife.redrawList[i][0];
         y = this.listLife.redrawList[i][1];
 
-
-///perhaps modify changeCelltoAlive to take in another parameter,
         if (this.listLife.redrawList[i][2] === 1) {
+          //added - determine species
           GOL.canvas.returnSpecies(x,y);
           this.canvas.changeCelltoAlive(x, y);
         } else if (this.listLife.redrawList[i][2] === 2) {
@@ -474,7 +474,7 @@
         }
       }
 
-      //added points update
+      //added points update, win condition, cookie
       this.updatePoints();
       GOL.steps = GOL.steps + 1;
       if (GOL.steps > 25)
@@ -485,8 +485,6 @@
           console.log("I'm printing cookie" + document.cookie);
           window.location.href = '#popup2';
         }
-      //console.log(GOL.levels.cellcount[0]+" "+GOL.levels.cellcount[1]);
-
     },
 
     //added
@@ -660,6 +658,7 @@
           }
         },
 
+        //added
         chooseColor: function () {
           var x = document.getElementById("enemycolor").value;
           var y = document.getElementById("playercolor").value;
@@ -674,8 +673,8 @@
           }
         },
 
+        //added
         addVirus: function () {
-          ///if have time, actually implement probability change
           if (GOL.chancebooster == 20)
           {
             GOL.element.messages.valert.textContent = 'You already have 100% cell born probability!';
@@ -809,15 +808,13 @@
             this.species[t1][t2] = 0;
           else
           {
+            //probability handler
             var sp = GOL.helpers.random(0,99);
             if (sp > (50 - GOL.chancebooster*2.5))
               GOL.canvas.species[t1][t2] = 1;
             else
               GOL.canvas.species[t1][t2] = 0;
           }
-            
-
-          //console.log(p[0] + ", " + p[1]);
         }
       },
 
@@ -865,7 +862,7 @@
         }
 
 
-        // Init species (Canvas reference)
+        //aaded Init species (Canvas reference)
         this.species = [];
         for (i = 0; i < GOL.columns; i++) {
           this.species[i] = [];
@@ -945,7 +942,7 @@
 
           if (this.age[i][j] > -1){
             //added
-            // this.context.fillStyle = GOL.colors.schemes[GOL.colors.current].alive[this.age[i][j] % GOL.colors.schemes[GOL.colors.current].alive.length];
+            //original this.context.fillStyle = GOL.colors.schemes[GOL.colors.current].alive[this.age[i][j] % GOL.colors.schemes[GOL.colors.current].alive.length];
             this.context.fillStyle = GOL.colors.schemes[GOL.colors.current].player[this.species[i][j]];
           }
 
@@ -965,9 +962,9 @@
       /**
        * switchCell
        */
-      switchCell: function (i, j) {
-        //console.log(GOL.canvas.species[i][j]);
+      switchCell: function (i, j) {        
         if (GOL.listLife.isAlive(i, j)) {
+          //added
           if (GOL.canvas.species[i][j] == 0)
             alert("Enemy Cell. Cannot be removed.");
           else
@@ -976,10 +973,10 @@
             GOL.listLife.removeCell(i, j, GOL.listLife.actualState);
             GOL.points = GOL.points + 1;
             GOL.updatePoints();
-          }
-           
+          }        
         }  
         else {
+          //added points checking and updating
           if (GOL.points > 0)
           {
             GOL.canvas.species[i][j] = 1;
@@ -1002,6 +999,7 @@
           this.age[i][j]++;
           this.drawCell(i, j, true);
         }
+        //added gold mine points
         if (this.species[i][j] == 1)
         {
           GOL.points = GOL.points + 1;
@@ -1016,8 +1014,6 @@
         if (i >= 0 && i < GOL.columns && j >= 0 && j < GOL.rows) {
           this.age[i][j] = 1;
           GOL.levels.cellcount[this.species[i][j]] =  GOL.levels.cellcount[this.species[i][j]]+1;
-///add code here to determine species
-///add randomizer
           this.drawCell(i, j, true);
         }
       },
@@ -1030,6 +1026,7 @@
         if (i >= 0 && i < GOL.columns && j >= 0 && j < GOL.rows) {
           this.age[i][j] = -this.age[i][j]; // Keep trail
           GOL.levels.cellcount[this.species[i][j]] =  GOL.levels.cellcount[this.species[i][j]]-1;
+          //added - update species
           this.species[i][j] = -1;
           this.drawCell(i, j, false);
         }
